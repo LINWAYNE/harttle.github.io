@@ -1,0 +1,30 @@
+# get all jpg|png files
+items := $(shell ls *.* | grep -E '*.[j][pP][gG]|*.[J][pP][gG]')
+files := $(addprefix file/,$(items))
+thumbs := $(addprefix thumb/,$(items))
+
+all: $(files) $(thumbs) list
+
+# generate files for web
+$(files): file/%: %
+	[ ! -d 'file' ] && mkdir file;\
+	convert -resize 1024x768 $< $@
+	#convert -resize 1024x768 -gravity center -extent 1024x768 -background "#ffffff" $< $@
+
+# generate thumbs for web
+$(thumbs): thumb/%: %
+	[ ! -d 'thumb' ] && mkdir thumb;\
+	convert -resize 240x160 $< $@
+	#convert -resize 240x160 -gravity center -extent 240x160 -background "#ffffff" $< $@
+
+.PHONY: list clean
+
+list: 
+	echo 'imgs:' > list.yml;\
+	for item in $(items);do\
+		echo -e '\t- '$$item >> list.yml;\
+	done;\
+
+clean:
+	-rm -rf file thumb list.yml
+
