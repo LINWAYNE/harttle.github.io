@@ -3,7 +3,7 @@ items := $(shell ls *.* | grep -E '*.[j][pP][gG]|*.[J][pP][gG]')
 files := $(addprefix file/,$(items))
 thumbs := $(addprefix thumb/,$(items))
 
-all: $(files) $(thumbs) list
+all: $(files) $(thumbs) list clean
 
 # generate files for web
 $(files): file/%: %
@@ -24,7 +24,12 @@ list:
 	for item in $(items);do\
 		echo -e '\t- '$$item >> list.yml;\
 	done;\
+	cat list.yml
 
 clean:
+	ls thumb | grep -E '*.*' | grep -x -v "`ls *.*`" | xargs -l -i rm thumb/{};\
+	ls file | grep -E '*.*' | grep -x -v "`ls *.*`" | xargs -l -i rm file/{}
+
+clean-all:
 	-rm -rf file thumb list.yml
 
