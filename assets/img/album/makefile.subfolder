@@ -20,11 +20,11 @@ $(thumbs): thumb/%: %
 .PHONY: list clean
 
 list: 
-	echo 'imgs:' > list.yml;\
+	echo 'imgs:' > /tmp/list.yml;\
 	for item in $(items);do\
-		echo -e '\t- '$$item >> list.yml;\
+		echo -e '\t- '$$item >> /tmp/list.yml;\
 	done;\
-	cat list.yml
+	cat /tmp/list.yml
 
 clean:
 	ls thumb | grep -E '*.*' | grep -x -v "`ls *.*`" | xargs -l -i rm thumb/{};\
