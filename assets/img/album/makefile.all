@@ -6,7 +6,7 @@ dirs := $(shell find . -maxdepth 1 -type d)
 dirs := $(basename $(patsubst ./%,%,$(dirs)))
 dirs := $(filter-out $(exclude_dirs),$(dirs))
 
-.PHONY: all clean
+.PHONY: all clean-all
 
 all: $(dirs)
 	for dir in $(dirs);do\

@@ -3,7 +3,7 @@ items := $(shell ls *.* | grep -E '*.[j][pP][gG]|*.[J][pP][gG]')
 files := $(addprefix file/,$(items))
 thumbs := $(addprefix thumb/,$(items))
 
-all: $(files) $(thumbs) list clean
+all: $(files) $(thumbs) list.yml clean
 
 # generate files for web
 $(files): file/%: %
@@ -17,14 +17,15 @@ $(thumbs): thumb/%: %
 	convert -resize 240x160 $< $@
 	#convert -resize 240x160 -gravity center -extent 240x160 -background "#ffffff" $< $@
 
-.PHONY: list clean
-
-list: 
-	echo 'imgs:' > /tmp/list.yml;\
-	for item in $(items);do\
-		echo -e '\t- '$$item >> /tmp/list.yml;\
+list.yml: $(items)
+	echo 'imgs:' > $@;\
+	-rm $@;\
+	for item in $<;do\
+		echo -e '\t- '$$item >> $@;\
 	done;\
-	cat /tmp/list.yml
+	cat $@
+
+.PHONY: clean
 
 clean:
 	ls thumb | grep -E '*.*' | grep -x -v "`ls *.*`" | xargs -l -i rm thumb/{};\
